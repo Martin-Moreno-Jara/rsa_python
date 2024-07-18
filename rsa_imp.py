@@ -44,7 +44,7 @@ print(f"phi: {phi_n}")
 print(f"p: {p}")
 print(f"q: {q}")
 
-message = 'hello world'
+message = 'This message is super secret'
 
 message_encoded = [ord(c) for c in message]
 
@@ -52,3 +52,9 @@ message_encoded = [ord(c) for c in message]
 ciphertext =  [pow(c,e,n) for c in message_encoded]
 
 print(ciphertext)
+
+message_encoded = [pow(c,d,n) for c in ciphertext]
+
+message_decoded = "".join(chr(c) for c in message_encoded)
+
+print(message_decoded)
