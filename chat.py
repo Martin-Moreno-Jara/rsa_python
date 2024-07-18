@@ -5,6 +5,7 @@ import threading
 public_key, private_key = rsa.newkeys(1024)
 public_partner = None
 
+
 choice:str = input('host (1) or connect (2): ')
 
 if choice == '1':
