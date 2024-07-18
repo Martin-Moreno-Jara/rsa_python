@@ -11,18 +11,19 @@ class rsa_imp:
             self.q = generate_prime(1000,10000)
         self.n = self.p*self.q
         self.phi_n = (self.p-1)*(self.q-1)
-        self.e= random.randint(3,self.phi_n-1)
-
-        while math.gcd(self.e,self.phi_n) !=1:
-           self. e= random.randint(3,self.phi_n-1)
 
     def generateKeys(self):
-        self.public_key = generate_prime(1000,10000)
-        self.private_key= mod_inverse(self.e,self.phi_n)
+        self.public_key= random.randint(3,self.phi_n-1)
+        while math.gcd(self.public_key,self.phi_n) !=1:
+           self.public_key= random.randint(3,self.phi_n-1)
 
-    def encrypt(self,message:str):
+        self.private_key= mod_inverse(self.public_key,self.phi_n)
+        return self.public_key
+
+    def encrypt(self,message:str,p_key:int):
         message_encoded = [ord(c) for c in message]
-        ciphertext =  [pow(c,self.e,self.n) for c in message_encoded]
+
+        ciphertext =  [pow(c,p_key,self.n) for c in message_encoded]
         return ciphertext
     
     def decrypt(self,ciphertext:list):
@@ -31,16 +32,14 @@ class rsa_imp:
         return message_decrypted
  
 
-
-
-
 myRSA = rsa_imp()
 myRSA.generateKeys()
 
-print(myRSA.n,myRSA.p)
+print(myRSA.public_key)
+
 print(myRSA.private_key,myRSA.public_key)
 
-ciphertext = myRSA.encrypt('mensaje super secreto')
+ciphertext = myRSA.encrypt('mensaje super secreto',myRSA.public_key)
 print(ciphertext)
 
 message = myRSA.decrypt(ciphertext)
