@@ -23,26 +23,26 @@ class rsa_imp:
     def encrypt(self,message:str,p_key:int,n:int=None)->str: 
         message_encoded = [ord(c) for c in message]
         ciphertext =  [pow(c,p_key,n) for c in message_encoded]
-        chipertext_string = " ".join(str(cipher) for cipher in ciphertext)
+        chipertext_string = "␟".join(str(cipher) for cipher in ciphertext)
         return chipertext_string
     
     def decrypt(self,ciphertext:str)->str:
-        cipherlist = ciphertext.split(" ")
+        cipherlist = ciphertext.split("␟")
         message_prepared = [int(cipher) for cipher in cipherlist]
         message_encoded = [pow(c,self.private_key,self.n) for c in message_prepared]
         message_decrypted = "".join(chr(c) for c in message_encoded)    
         return message_decrypted
  
-myrsa = rsa_imp()
+# myrsa = rsa_imp()
 
-myrsa.generateKeys()
+# myrsa.generateKeys()
 
-message = 'Sleeping is the best'
+# message = 'Sleeping is the best'
 
-ciphertext = myrsa.encrypt(message,myrsa.public_key,myrsa.n)
+# ciphertext = myrsa.encrypt(message,myrsa.public_key,myrsa.n)
 
-print(ciphertext)
+# print(ciphertext)
 
-decrypted = myrsa.decrypt(ciphertext)
+# decrypted = myrsa.decrypt(ciphertext)
 
-print(decrypted)
+# print(decrypted)
