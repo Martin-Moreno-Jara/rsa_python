@@ -19,15 +19,15 @@ if choice == '1':
 
     client, _ = server.accept()
     client.send(public_key.to_bytes(1024,"big"))
-    public_partner = client.recv(1024)
-    print(f'1 partner: {int.from_bytes(public_partner,"big") }')
+    public_partner = int.from_bytes(client.recv(1024),"big") 
+    print(f'1 partner: {public_partner}')
 elif choice == '2':
     print(f'you are connecting {public_key}')
     client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     client.connect(("192.168.20.6",5029))
-    public_partner = client.recv(1024)
+    public_partner = int.from_bytes(client.recv(1024),"big") 
     client.send(public_key.to_bytes(1024,'big'))
-    print(f'2 partner: {int.from_bytes(public_partner,"big") }')
+    print(f'2 partner: {public_partner}')
 else:
     exit()
 
@@ -35,7 +35,7 @@ else:
 def send_message(client):
     while True:
         message = input("")
-        client.send(rsa.encrypt(message.encode(),public_partner))
+        client.send(bytes(rsa.encrypt(message,public_partner)) )
         print(f'you: {message} ')
 
 def receive_message(c):

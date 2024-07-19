@@ -20,49 +20,29 @@ class rsa_imp:
         self.private_key= mod_inverse(self.public_key,self.phi_n)
         return self.public_key
 
-    def encrypt(self,message:str,p_key:int):
+    def encrypt(self,message:str,p_key:int,n:int=None)->str: 
         message_encoded = [ord(c) for c in message]
-
-        ciphertext =  [pow(c,p_key,self.n) for c in message_encoded]
-        return ciphertext
+        ciphertext =  [pow(c,p_key,n) for c in message_encoded]
+        chipertext_string = " ".join(str(cipher) for cipher in ciphertext)
+        return chipertext_string
     
-    def decrypt(self,ciphertext:list):
-        message_encoded = [pow(c,self.private_key,self.n) for c in ciphertext]
+    def decrypt(self,ciphertext:str)->str:
+        cipherlist = ciphertext.split(" ")
+        message_prepared = [int(cipher) for cipher in cipherlist]
+        message_encoded = [pow(c,self.private_key,self.n) for c in message_prepared]
         message_decrypted = "".join(chr(c) for c in message_encoded)    
         return message_decrypted
  
+myrsa = rsa_imp()
 
-myRSA = rsa_imp()
-myRSA.generateKeys()
+myrsa.generateKeys()
 
-print(myRSA.public_key)
+message = 'Sleeping is the best'
 
-print(myRSA.private_key,myRSA.public_key)
+ciphertext = myrsa.encrypt(message,myrsa.public_key,myrsa.n)
 
-ciphertext = myRSA.encrypt('mensaje super secreto',myRSA.public_key)
 print(ciphertext)
 
-message = myRSA.decrypt(ciphertext)
-print(message)
+decrypted = myrsa.decrypt(ciphertext)
 
-# print(f"public key: {e}")
-# print(f"private key: {d}")
-# print(f"n: {n}")
-# print(f"phi: {phi_n}")
-# print(f"p: {p}")
-# print(f"q: {q}")
-
-# message = 'This message is super secret'
-
-# message_encoded = [ord(c) for c in message]
-
-# # (m^e) mod n = c
-# ciphertext =  [pow(c,e,n) for c in message_encoded]
-
-# print(ciphertext)
-
-# message_encoded = [pow(c,d,n) for c in ciphertext]
-
-# message_decoded = "".join(chr(c) for c in message_encoded)
-
-# print(message_decoded)
+print(decrypted)
