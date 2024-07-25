@@ -1,6 +1,6 @@
 import math
 import random
-from utils import generate_prime,mod_inverse
+from utils.math_utils import generate_prime,mod_inverse,mcd
 
 class rsa_imp:
     def __init__(self):
@@ -14,7 +14,7 @@ class rsa_imp:
 
     def generateKeys(self):
         self.public_key= random.randint(3,self.phi_n-1)
-        while math.gcd(self.public_key,self.phi_n) !=1:
+        while mcd(self.public_key,self.phi_n) !=1:
            self.public_key= random.randint(3,self.phi_n-1)
 
         self.private_key= mod_inverse(self.public_key,self.phi_n)
@@ -32,6 +32,7 @@ class rsa_imp:
         message_encoded = [pow(c,self.private_key,self.n) for c in message_prepared]
         message_decrypted = "".join(chr(c) for c in message_encoded)    
         return message_decrypted
+    
  
 # myrsa = rsa_imp()
 

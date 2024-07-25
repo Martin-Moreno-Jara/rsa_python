@@ -1,10 +1,20 @@
 import random 
 
+def mcd(a:int,b:int):
+    if a == 0 and b == 0:
+        raise ValueError('No existe MCD')
+    if b == 0:
+        return a
+    else:
+       return mcd(b,a%b)
+
 def mod_inverse(e,phi):
     for d in range(3,phi):
         if(d*e)%phi == 1:
             return d 
     raise ValueError("No existe el inverso modular")
+
+
 def is_prime(number:int):
     if number<2:
         return False
