@@ -8,11 +8,24 @@ def mcd(a:int,b:int):
     else:
        return mcd(b,a%b)
 
+def extended_mcd(a:int,b:int):
+    if b==0:
+        mcd,x,y = a,1,0
+    else:
+        (p,q,mcd) = extended_mcd(b,a%b)
+        x=q
+        y = p-q * (a//b)
+    assert a % mcd == 0 and b % mcd == 0
+    assert mcd == a*x + b*y
+    return (x,y,mcd)
+
 def mod_inverse(e,phi):
-    for d in range(3,phi):
-        if(d*e)%phi == 1:
-            return d 
-    raise ValueError("No existe el inverso modular")
+    if(mcd(phi,e) != 1):
+        raise ValueError("No existe el inverso modular")
+    x,_,_ = extended_mcd(e,phi)
+    inverse = x % phi
+    assert (e*inverse)%phi ==1
+    return inverse
 
 
 def is_prime(number:int):
