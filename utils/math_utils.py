@@ -27,14 +27,22 @@ def mod_inverse(e,phi):
     assert (e*inverse)%phi ==1
     return inverse
 
+def min_divisor(m:int):
+    for number in range (2,m+1):
+        if m % number == 0:
+            return number
+        if number*number>m:
+            return m
+        
 
 def is_prime(number:int):
-    if number<2:
-        return False
-    for i in range(2,number//2+1):
-        if number % i ==0:
-            return False
-    return True
+    # if number<2:
+    #     return False
+    # for i in range(2,number//2+1):
+    #     if number % i ==0:
+    #         return False
+    # return True
+    return number == min_divisor(number)
 
 def generate_prime(min_val:int,max_val:int):
     prime:int = random.randint(min_val,max_val)
