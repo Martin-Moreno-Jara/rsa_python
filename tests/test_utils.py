@@ -1,5 +1,5 @@
 import pytest
-from utils.math_utils import mcd, extended_mcd,mod_inverse,min_divisor,is_prime
+from utils.math_utils import mcd, extended_mcd,mod_inverse,min_divisor,is_prime, mod_exp
 
 @pytest.mark.parametrize(
         "input_a, input_b, expected",
@@ -69,3 +69,17 @@ def test_min_divisor_params(input_m,expected):
 )
 def test_is_prime_params(input_number,expected):
     assert is_prime(input_number) == expected
+
+
+@pytest.mark.parametrize(
+        "input_base, input_exp, input_mod, expected",
+        [
+            (314159265358,2718281828,123456789,32073907),
+            (3,618970019642690137449562110,618970019642690137449562111,1),
+            (51688453554555,5655568848565,4458664214,3763127797),
+            (17544886699,44114114,2556,2401),
+            (175448866998774,441141144452856,2556554487856,869407387968)
+        ]
+)
+def test_mod_exp_params(input_base,input_exp,input_mod,expected):
+    assert mod_exp(input_base,input_exp,input_mod) == expected

@@ -1,6 +1,6 @@
 import math
 import random
-from utils.math_utils import generate_prime,mod_inverse,mcd
+from utils.math_utils import generate_prime,mod_inverse,mcd,mod_exp
 
 class rsa_imp:
     def __init__(self):
@@ -22,14 +22,14 @@ class rsa_imp:
 
     def encrypt(self,message:str,p_key:int,n:int=None)->str: 
         message_encoded = [ord(c) for c in message]
-        ciphertext =  [pow(c,p_key,n) for c in message_encoded]
+        ciphertext =  [mod_exp(c,p_key,n) for c in message_encoded]
         chipertext_string = "␟".join(str(cipher) for cipher in ciphertext)
         return chipertext_string
     
     def decrypt(self,ciphertext:str)->str:
         cipherlist = ciphertext.split("␟")
         message_prepared = [int(cipher) for cipher in cipherlist]
-        message_encoded = [pow(c,self.private_key,self.n) for c in message_prepared]
+        message_encoded = [mod_exp(c,self.private_key,self.n) for c in message_prepared]
         message_decrypted = "".join(chr(c) for c in message_encoded)    
         return message_decrypted
     

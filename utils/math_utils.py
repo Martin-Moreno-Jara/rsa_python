@@ -34,6 +34,16 @@ def min_divisor(m:int):
         if number*number>m:
             return m
         
+def mod_exp(base:int,exp:int,mod:int):
+    if exp == 0:
+        return 1
+    if exp == 1:
+        return base
+    if exp % 2 == 0:
+        return mod_exp((base**2)%mod, exp//2, mod)
+    else:
+        return (mod_exp(base,exp-1,mod)*base) % mod
+            
 
 def is_prime(number:int):
     # if number<2:
