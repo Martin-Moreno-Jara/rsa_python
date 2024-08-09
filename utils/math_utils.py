@@ -54,8 +54,12 @@ def is_prime(number:int):
     # return True
     return number == min_divisor(number)
 
-def generate_prime(min_val:int,max_val:int):
-    prime:int = random.randint(min_val,max_val)
-    while not is_prime(prime):
-        prime:int = random.randint(min_val,max_val)
-    return prime
+def generate_prime(keysize:int):
+    # prime:int = random.randint(min_val,max_val)
+    # while not is_prime(prime):
+    #     prime:int = random.randint(min_val,max_val)
+    # return prime
+    while True:
+        num = random.randrange(2 ** (keysize-1),2** keysize - 1)
+        if(is_prime(num)):
+            return num

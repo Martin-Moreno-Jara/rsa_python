@@ -6,16 +6,22 @@ class rsa_imp:
     def __init__(self):
         self.public_key:int = None
         self.private_key:int = None
-        self.p,self.q = generate_prime(1000,10000), generate_prime(1000,10000)
+        self.p,self.q = generate_prime(42), generate_prime(42)
         while self.p == self.q:
-            self.q = generate_prime(1000,10000)
+            self.q = generate_prime(42)
         self.n = self.p*self.q
         self.phi_n = (self.p-1)*(self.q-1)
 
     def generateKeys(self):
-        self.public_key= random.randint(3,self.phi_n-1)
-        while mcd(self.public_key,self.phi_n) !=1:
-           self.public_key= random.randint(3,self.phi_n-1)
+        keysize=42
+        while True:
+            self.public_key = random.randrange(2** (keysize-1),2 ** keysize -1)
+            if mcd(self.public_key,self.phi_n) ==1:
+                break
+        
+        #self.public_key= random.randint(3,self.phi_n-1)
+        # while mcd(self.public_key,self.phi_n) !=1:
+        #    self.public_key= random.randint(3,self.phi_n-1)
 
         self.private_key= mod_inverse(self.public_key,self.phi_n)
         return self.public_key
@@ -34,16 +40,20 @@ class rsa_imp:
         return message_decrypted
     
  
-# myrsa = rsa_imp()
+myrsa = rsa_imp()
 
-# myrsa.generateKeys()
+myrsa.generateKeys()
 
-# message = 'Sleeping is the best'
+print('keys ///')
+print(myrsa.public_key)
+print(myrsa.private_key)
 
-# ciphertext = myrsa.encrypt(message,myrsa.public_key,myrsa.n)
+message = 'Sleeping is the best'
 
-# print(ciphertext)
+ciphertext = myrsa.encrypt(message,myrsa.public_key,myrsa.n)
 
-# decrypted = myrsa.decrypt(ciphertext)
+print(ciphertext)
 
-# print(decrypted)
+decrypted = myrsa.decrypt(ciphertext)
+
+print(decrypted)
