@@ -49,7 +49,7 @@
 #         print(f'you: {message} ')
 
 # def receive_message(c):
-#     while True:
+   
 #         decoded = c.recv(1024).decode()
 #         decryptes = rsa.decrypt(decoded)
 #         print(f'parnter: {decryptes}')
@@ -62,9 +62,9 @@
 # #ENCRYPTED
 # threading.Thread(target=send_message, args=(client,)).start()
 # threading.Thread(target=receive_message, args=(client,)).start()
-# # NOT ENCRYPTED 
-# # threading.Thread(target=send_message_ne, args=(client,)).start()
-# # threading.Thread(target=receive_message_ne, args=(client,)).start()
+# # # NOT ENCRYPTED 
+# # # threading.Thread(target=send_message_ne, args=(client,)).start()
+# # # threading.Thread(target=receive_message_ne, args=(client,)).start()
 
 ##--------------------------------------
 
@@ -263,7 +263,124 @@
 # update_text()
 
 # root.mainloop()
+#-----------------------------------------------------------------------------------------------------------------------
+# intento PRINCIPAL GABO
+# import tkinter as tk
+# from tkinter import ttk
+# import threading
+# import socket
+# from rsa_imp import rsa_imp
+# import sys
+# import io
 
+# # Redirigir la salida estándar (print) a la interfaz gráfica
+
+
+# def start_rsa_program(input_widget, text_widget):
+#     # Redirigir la entrada estándar (input)
+#     def input_prompt():
+#         texto=input_widget.get()
+#         text_widget.insert(tk.END, texto + "\n")
+        
+#         input_widget.delete(0, tk.END)
+#         return texto
+
+
+#     rsa = rsa_imp()
+
+#     public_key = rsa.generateKeys()
+#     public_partner, partner_n = None, None
+
+#     print(public_key)
+
+#     text_widget.insert(tk.END,'host (1) or connect (2): ')
+#     choice = input_prompt()
+#     text_public_key=str(public_key)
+#     text_public_partner=str(public_partner)
+#     if choice == '1':
+       
+#         text_widget.insert(tk.END,'You are hosting'+ text_public_key)
+#         print(f'You are hosting {public_key}')
+#         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#         server.bind(("192.168.20.86", 9999))
+#         server.listen()
+
+#         client, _ = server.accept()
+#         client.send(public_key.to_bytes(1024, "big"))
+#         client.send(rsa.n.to_bytes(1024, "big"))
+#         public_partner = int.from_bytes(client.recv(1024), "big")
+#         partner_n = int.from_bytes(client.recv(1024), 'big')
+#         text_widget.insert(tk.END,'1 partner'+ text_public_partner)
+#         print(f'1 partner: {public_partner}')
+#     elif choice == '2':
+#         print(f'You are connecting {public_key}')
+#         text_widget.insert(tk.END,'You are connecting'+ text_public_key)
+#         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#         client.connect(("192.168.20.86", 9999))
+#         public_partner = int.from_bytes(client.recv(1024), "big")
+#         partner_n = int.from_bytes(client.recv(1024), 'big')
+#         client.send(public_key.to_bytes(1024, 'big'))
+#         client.send(rsa.n.to_bytes(1024, "big"))
+#         print(f'2 partner: {public_partner}')
+#         text_widget.insert(tk.END,'2 partner'+ text_public_partner)
+#     else:
+#         return
+
+#     def send_message(client):
+#         while True:
+#           #  text_widget.insert(tk.END,'You')
+#             hola=input("")
+#             message = input_prompt()
+#             client.send(rsa.encrypt(message, public_partner, partner_n).encode())
+#             print(f'You: {message}')
+           
+
+#     def receive_message(c):
+#         while True:
+#             text_widget.insert(tk.END,'Partner')
+#             decoded = c.recv(1024).decode()
+#             decrypted = rsa.decrypt(decoded)
+#             print(f'Partner: {decrypted}')
+
+#     threading.Thread(target=send_message, args=(client,), daemon=True).start()
+#     threading.Thread(target=receive_message, args=(client,), daemon=True).start()
+
+# def main():
+#     # Crear la ventana principal
+#     root = tk.Tk()
+#     root.title("RSA Chat")
+#     root.geometry("600x400")
+#     root.configure(bg='#e0f0ff')
+
+#     # Crear un marco para organizar los widgets
+#     main_frame = tk.Frame(root, bg='#e0f0ff')
+#     main_frame.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
+
+#     # Crear un widget Text para mostrar la salida (print)
+#     text_output = tk.Text(main_frame, height=15, width=70, bg='#f0f8ff', fg='#000000', wrap=tk.WORD, font=('Arial', 12))
+#     text_output.pack(pady=10, fill=tk.BOTH, expand=True)
+
+#     # Redirigir el print a la interfaz gráfica
+
+
+#     # Crear un cuadro de entrada de texto
+#     entry_input = tk.Entry(main_frame, width=70, font=('Arial', 12))
+#     entry_input.pack(pady=10)
+
+#     # Crear un botón para iniciar el programa RSA
+#     start_button = ttk.Button(main_frame, text="Start", command=lambda: threading.Thread(target=start_rsa_program, args=(entry_input, text_output), daemon=True).start())
+#     start_button.pack(pady=10)
+
+
+
+#     # Iniciar el bucle principal de la aplicación
+#     root.mainloop()
+
+
+
+# if __name__ == "__main__":
+#     main()
+#---------------------------------------------------------------------------------------------------------------------
 import tkinter as tk
 from tkinter import ttk
 import threading
@@ -271,19 +388,20 @@ import socket
 from rsa_imp import rsa_imp
 import sys
 import io
+import time
 
 # Redirigir la salida estándar (print) a la interfaz gráfica
 
-
-def start_rsa_program(input_widget, text_widget):
-    # Redirigir la entrada estándar (input)
-    def input_prompt():
+def input_prompt(input_widget, text_widget):
         texto=input_widget.get()
         text_widget.insert(tk.END, texto + "\n")
         
         input_widget.delete(0, tk.END)
         return texto
 
+def start_rsa_program(input_widget, text_widget):
+    # Redirigir la entrada estándar (input)
+    
 
     rsa = rsa_imp()
 
@@ -293,7 +411,7 @@ def start_rsa_program(input_widget, text_widget):
     print(public_key)
 
     text_widget.insert(tk.END,'host (1) or connect (2): ')
-    choice = input_prompt()
+    choice = input_prompt(input_widget, text_widget)
     text_public_key=str(public_key)
     text_public_partner=str(public_partner)
     if choice == '1':
@@ -301,7 +419,7 @@ def start_rsa_program(input_widget, text_widget):
         text_widget.insert(tk.END,'You are hosting'+ text_public_key)
         print(f'You are hosting {public_key}')
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server.bind(("192.168.1.11", 9999))
+        server.bind(("192.168.20.86", 9999))
         server.listen()
 
         client, _ = server.accept()
@@ -309,13 +427,13 @@ def start_rsa_program(input_widget, text_widget):
         client.send(rsa.n.to_bytes(1024, "big"))
         public_partner = int.from_bytes(client.recv(1024), "big")
         partner_n = int.from_bytes(client.recv(1024), 'big')
-        text_widget.insert(tk.END,'1 partner'+ text_public_partner)
+        text_widget.insert(tk.END,'1 partner'+ text_public_partner+'\n')
         print(f'1 partner: {public_partner}')
     elif choice == '2':
         print(f'You are connecting {public_key}')
         text_widget.insert(tk.END,'You are connecting'+ text_public_key)
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect(("192.168.1.11", 9999))
+        client.connect(("192.168.20.86", 9999))
         public_partner = int.from_bytes(client.recv(1024), "big")
         partner_n = int.from_bytes(client.recv(1024), 'big')
         client.send(public_key.to_bytes(1024, 'big'))
@@ -327,16 +445,19 @@ def start_rsa_program(input_widget, text_widget):
 
     def send_message(client):
         while True:
-            text_widget.insert(tk.END,'You')
-            message = input_prompt()
+            time.sleep(10)
+            text_widget.insert(tk.END,'You: ')
+            message = input_prompt(input_widget, text_widget)
+            text_widget.insert(tk.END,'\n')
             client.send(rsa.encrypt(message, public_partner, partner_n).encode())
             print(f'You: {message}')
 
     def receive_message(c):
         while True:
-            text_widget.insert(tk.END,'Partner')
+           # text_widget.insert(tk.END,'Partner: ')
             decoded = c.recv(1024).decode()
             decrypted = rsa.decrypt(decoded)
+            text_widget.insert(tk.END,'Partner:'+decrypted+'\n')
             print(f'Partner: {decrypted}')
 
     threading.Thread(target=send_message, args=(client,), daemon=True).start()
@@ -368,107 +489,12 @@ def main():
     start_button = ttk.Button(main_frame, text="Start", command=lambda: threading.Thread(target=start_rsa_program, args=(entry_input, text_output), daemon=True).start())
     start_button.pack(pady=10)
 
+    continue_button = ttk.Button(main_frame, text="Contnue", command=lambda:input_prompt(entry_input, text_output))
+    continue_button.pack(pady=10)
 
+  
     # Iniciar el bucle principal de la aplicación
     root.mainloop()
 
 if __name__ == "__main__":
     main()
-#-------------------
-#tercer intento
-# import tkinter as tk
-# import threading
-# import socket
-# from rsa_imp import rsa_imp
-
-# rsa = rsa_imp()
-
-# # Variables globales
-# public_key = rsa.generateKeys()
-# public_partner, partner_n = None, None
-# client = None
-# choice = None
-
-# # Funciones de red
-# def iniciar_conexion():
-#     global client, public_partner, partner_n, choice
-    
-#     if choice == '1':
-#         text_output.insert(tk.END, f"You are hosting {public_key}\n")
-#         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#         server.bind(("192.168.1.11", 9999))
-#         server.listen()
-
-#         client, _ = server.accept()
-#         client.send(public_key.to_bytes(1024, "big"))
-#         client.send(rsa.n.to_bytes(1024, "big"))
-#         public_partner = int.from_bytes(client.recv(1024), "big")
-#         partner_n = int.from_bytes(client.recv(1024), 'big')
-#         text_output.insert(tk.END, f"Partner's public key: {public_partner}\n")
-        
-#     elif choice == '2':
-#         text_output.insert(tk.END, f"You are connecting {public_key}\n")
-#         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#         client.connect(("192.168.1.11", 9999))
-#         public_partner = int.from_bytes(client.recv(1024), "big")
-#         partner_n = int.from_bytes(client.recv(1024), 'big')
-#         client.send(public_key.to_bytes(1024, 'big'))
-#         client.send(rsa.n.to_bytes(1024, "big"))
-#         text_output.insert(tk.END, f"Partner's public key: {public_partner}\n")
-
-#     # Inicia los hilos para enviar y recibir mensajes
-#     threading.Thread(target=send_message).start()
-#     threading.Thread(target=receive_message).start()
-
-# def send_message():
-#     global client
-#     while True:
-#         # Espera a que haya un mensaje en la cola de mensajes
-#         pass
-
-# def receive_message():
-#     global client
-#     while True:
-#         decoded = client.recv(1024).decode()
-#         decryptes = rsa.decrypt(decoded)
-#         text_output.insert(tk.END, f"Partner: {decryptes}\n")
-
-# # Funciones de la interfaz gráfica
-# def set_choice(val):
-#     global choice
-#     choice = val
-#     iniciar_conexion()
-
-# def enviar_mensaje():
-#     global client
-#     message = entry_message.get()
-#     if message and client:
-#         encrypted_message = rsa.encrypt(message, public_partner, partner_n)
-#         client.send(encrypted_message.encode())
-#         text_output.insert(tk.END, f"You: {message}\n")
-#         entry_message.delete(0, tk.END)
-
-# # Interfaz gráfica
-# root = tk.Tk()
-# root.title("RSA Chat")
-
-# # Cuadro de texto para mostrar los mensajes
-# text_output = tk.Text(root, height=15, width=70, bg='#f0f8ff', fg='#000000', wrap=tk.WORD, font=('Arial', 12))
-# text_output.pack(pady=10, fill=tk.BOTH, expand=True)
-
-# # Entrada de texto para escribir mensajes
-# entry_message = tk.Entry(root, width=40)
-# entry_message.pack(pady=10)
-
-# # Botones para seleccionar el modo de operación
-# button_host = tk.Button(root, text="1", command=lambda: set_choice('1'))
-# button_host.pack(side=tk.LEFT, padx=10)
-
-# button_connect = tk.Button(root, text="2", command=lambda: set_choice('2'))
-# button_connect.pack(side=tk.LEFT, padx=10)
-
-# # Botón para enviar mensajes
-# button_send = tk.Button(root, text="Enviar", command=enviar_mensaje)
-# button_send.pack(side=tk.LEFT, padx=10)
-
-# root.mainloop()
