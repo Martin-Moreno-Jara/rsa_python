@@ -296,6 +296,7 @@ def start_rsa_program(input_widget, text_widget):
     choice = input_prompt()
     text_public_key=str(public_key)
     text_public_partner=str(public_partner)
+    
     if choice == '1':
        
         text_widget.insert(tk.END,'You are hosting'+ text_public_key)
