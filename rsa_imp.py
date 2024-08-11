@@ -40,20 +40,20 @@ class rsa_imp:
         return message_decrypted
     
  
-myrsa = rsa_imp()
+# myrsa = rsa_imp()
 
-myrsa.generateKeys()
+# myrsa.generateKeys()
 
-print('keys ///')
-print(myrsa.public_key)
-print(myrsa.private_key)
+# print('keys ///')
+# print(myrsa.public_key)
+# print(myrsa.private_key)
 
-message = 'Sleeping is the best'
+# message = 'Sleeping is the best'
 
-ciphertext = myrsa.encrypt(message,myrsa.public_key,myrsa.n)
+# ciphertext = myrsa.encrypt(message,myrsa.public_key,myrsa.n)
 
-print(ciphertext)
+# print(ciphertext)
 
-decrypted = myrsa.decrypt(ciphertext)
+# decrypted = myrsa.decrypt(ciphertext)
 
-print(decrypted)
+# print(decrypted)

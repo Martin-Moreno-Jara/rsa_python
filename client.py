@@ -3,13 +3,21 @@ import threading
 import tkinter
 import tkinter.scrolledtext
 from tkinter import simpledialog
-
+from rsa_imp import rsa_imp
 HOST = socket.gethostbyname(socket.gethostname()) #'127.0.0.1' 
 PORT = 9090
 
 class Client:
 
     def __init__(self,host,port):
+        self.rsa:rsa_imp = rsa_imp()
+
+        self.public_key = self.rsa.generateKeys()
+        self.public_partner, self.partner_n = None, None
+
+        print('my e ',self.public_key)
+        print('my n ',self.rsa.n)
+
         self.sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
         self.sock.connect((host,port))
 
@@ -55,6 +63,12 @@ class Client:
         self.win.protocol("WM_DELETE_WINDOW",self.stop)
 
         self.win.mainloop()
+    
+    def display_message(self,message):
+        self.text_area.config(state='normal')
+        self.text_area.insert('end',message)
+        self.text_area.yview('end')
+        self.text_area.config(state='disabled')
 
     def stop(self):
         self.running = False
@@ -63,22 +77,33 @@ class Client:
         exit(0)
 
     def write(self):
-        message = f"{self.nickname}: {self.input_area.get('1.0','end')}"
-        self.sock.send(message.encode('utf-8'))
+        message = f"{self.nickname}: {self.input_area.get('1.0','end')}"  
+        self.display_message(message)
+        encriptedMessage = self.rsa.encrypt(message, self.public_partner, self.partner_n)
+        self.sock.send(encriptedMessage.encode())
         self.input_area.delete('1.0','end')
+    
+
     
     def receive(self):
         while self.running:
             try:
-                message = self.sock.recv(1024).decode('utf-8')
+                message = self.sock.recv(1024).decode()
                 if message == 'NICK':
-                    self.sock.send(self.nickname.encode('utf-8'))
+                    self.sock.send(self.nickname.encode())
+                elif message == 'EANDN':
+                    self.sock.send(str(self.public_key).encode())
+                    self.sock.send(str(self.rsa.n).encode())
+                elif message.split(' ')[0] == "GETKEYS":
+                    splitmessage = message.split(' ')
+                    self.public_partner = int(splitmessage[1])
+                    self.partner_n = int(splitmessage[2])
+                    print(self.public_partner,self.partner_n)
                 else:
                     if self.gui_done:
-                        self.text_area.config(state='normal')
-                        self.text_area.insert('end',message)
-                        self.text_area.yview('end')
-                        self.text_area.config(state='disabled')
+                        decrypted = self.rsa.decrypt(message)
+                        self.display_message(decrypted)
+      
             except ConnectionAbortedError:
                 break
             except:
