@@ -302,7 +302,7 @@ def start_rsa_program(input_widget, text_widget):
         text_widget.insert(tk.END,'You are hosting'+ text_public_key)
         print(f'You are hosting {public_key}')
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server.bind(("192.168.1.11", 9999))
+        server.bind(("192.168.20.6", 9999))
         server.listen()
 
         client, _ = server.accept()
