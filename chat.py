@@ -419,7 +419,7 @@ def start_rsa_program(input_widget, text_widget):
         text_widget.insert(tk.END,'You are hosting'+ text_public_key)
         print(f'You are hosting {public_key}')
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server.bind(("192.168.20.86", 9999))
+        server.bind(("192.168.20.6", 9999))
         server.listen()
 
         client, _ = server.accept()
@@ -433,7 +433,7 @@ def start_rsa_program(input_widget, text_widget):
         print(f'You are connecting {public_key}')
         text_widget.insert(tk.END,'You are connecting'+ text_public_key)
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect(("192.168.20.86", 9999))
+        client.connect(("192.168.20.6", 9999))
         public_partner = int.from_bytes(client.recv(1024), "big")
         partner_n = int.from_bytes(client.recv(1024), 'big')
         client.send(public_key.to_bytes(1024, 'big'))
@@ -478,8 +478,6 @@ def main():
     text_output = tk.Text(main_frame, height=15, width=70, bg='#f0f8ff', fg='#000000', wrap=tk.WORD, font=('Arial', 12))
     text_output.pack(pady=10, fill=tk.BOTH, expand=True)
 
-    # Redirigir el print a la interfaz gráfica
-
 
     # Crear un cuadro de entrada de texto
     entry_input = tk.Entry(main_frame, width=70, font=('Arial', 12))
@@ -489,12 +487,10 @@ def main():
     start_button = ttk.Button(main_frame, text="Start", command=lambda: threading.Thread(target=start_rsa_program, args=(entry_input, text_output), daemon=True).start())
     start_button.pack(pady=10)
 
-    continue_button = ttk.Button(main_frame, text="Contnue", command=lambda:input_prompt(entry_input, text_output))
-    continue_button.pack(pady=10)
-
-  
     # Iniciar el bucle principal de la aplicación
     root.mainloop()
 
 if __name__ == "__main__":
     main()
+
+#--------------------------------------------------------------------------------------------------------------
